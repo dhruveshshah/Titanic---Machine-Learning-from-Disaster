@@ -1,6 +1,4 @@
 
-
-
 # Load raw data
 train <- read.csv("C:\\Users\\Dhruvesh\\Documents\\Kaggle\\train.csv", header = TRUE)
 test <- read.csv("C:\\Users\\Dhruvesh\\Documents\\Kaggle\\test.csv", header = TRUE)
@@ -215,9 +213,6 @@ ggplot(data.combined[1:891,], aes(x = family.size, fill = Survived)) +
   labs(fill = "Survived")
 
 
-
-
-
 # Take a look at the ticket variable
 str(data.combined$Ticket)
 
@@ -362,8 +357,6 @@ ggplot(data.combined[1:891,], aes(x = cabin.multiple, fill = survived)) +
   labs(fill = "Survived")
 
 
-
-
 # Does survivability depend on where you got onboard the Titanic?
 str(data.combined$embarked)
 levels(data.combined$embarked)
@@ -379,14 +372,6 @@ ggplot(data.combined[1:891,], aes(x = embarked, fill = survived)) +
   ylim(0,300) +
   labs(fill = "Survived")
 
-
-#==============================================================================
-#
-# Video #4 - Exploratory Modeling
-#
-#==============================================================================
-
-
 library(randomForest)
 
 # Train a Random Forest with the default parameters using pclass & title
@@ -398,8 +383,6 @@ rf.1 <- randomForest(x = rf.train.1, y = rf.label, importance = TRUE, ntree = 10
 rf.1
 varImpPlot(rf.1)
 
-
-
 # Train a Random Forest using pclass, title, & sibsp
 rf.train.2 <- data.combined[1:891, c("pclass", "title", "sibsp")]
 
@@ -407,7 +390,6 @@ set.seed(1234)
 rf.2 <- randomForest(x = rf.train.2, y = rf.label, importance = TRUE, ntree = 1000)
 rf.2
 varImpPlot(rf.2)
-
 
 
 # Train a Random Forest using pclass, title, & parch
@@ -419,7 +401,6 @@ rf.3
 varImpPlot(rf.3)
 
 
-
 # Train a Random Forest using pclass, title, sibsp, parch
 rf.train.4 <- data.combined[1:891, c("Pclass", "title", "SibSp", "Parch")]
 rf.label <- as.factor(train$Survived)
@@ -427,7 +408,6 @@ set.seed(1234)
 rf.4 <- randomForest(x = rf.train.4, y = rf.label, importance = TRUE, ntree = 1000)
 rf.4
 varImpPlot(rf.4)
-
 
 
 # Train a Random Forest using pclass, title, & family.size
@@ -439,7 +419,6 @@ rf.5
 varImpPlot(rf.5)
 
 
-
 # Train a Random Forest using pclass, title, sibsp, & family.size
 rf.train.6 <- data.combined[1:891, c("Pclass", "title", "SibSp", "family.size")]
 rf.label <- as.factor(train$Survived)
@@ -449,7 +428,6 @@ rf.6
 varImpPlot(rf.6)
 
 
-
 # Train a Random Forest using pclass, title, parch, & family.size
 rf.train.7 <- data.combined[1:891, c("Pclass", "title", "Parch", "family.size")]
 
@@ -457,14 +435,6 @@ set.seed(1234)
 rf.7 <- randomForest(x = rf.train.7, y = rf.label, importance = TRUE, ntree = 1000)
 rf.7
 varImpPlot(rf.7)
-
-
-#==============================================================================
-#
-# Video #5 - Cross Validation
-#
-#==============================================================================
-
 
 # Before we jump into features engineering we need to establish a methodology
 # for estimating our error rate on the test set (i.e., unseen data). This is
@@ -500,7 +470,6 @@ rf.5.1<-train(x=rf.train.5,y=rf.label,method="rf",tunelength=3, ntree=1000, trco
 stopCluster(c1)
 rf.5.1
 
-##############################################################
 
 set.seed(2134)
 cv.10.folds<-createMultiFolds(rf.label,k=3,times = 10)
@@ -525,7 +494,6 @@ table(rf.5.preds)
 submit.df <- data.frame(PassengerId = rep(892:1309), Survived = rf.5.preds)
 
 write.csv(submit.df, file = "Cross_Validation_06092017_3.csv", row.names = FALSE)
-##########################
 
 
 test.submit.df <- data.combined[892:1309, c("pclass", "title", "family.size")]
@@ -589,9 +557,6 @@ stopCluster(cl)
 # Check out results
 rf.5.cv.1
 
-
-
-
 # The above is only slightly more pessimistic than the rf.5 OOB prediction, but 
 # not pessimistic enough. Let's try 5-fold CV repeated 10 times.
 set.seed(5983)
@@ -612,7 +577,6 @@ stopCluster(cl)
 
 # Check out results
 rf.5.cv.2
-
 
 # 5-fold CV isn't better. Move to 3-fold CV repeated 10 times. 
 set.seed(37596)
@@ -644,10 +608,6 @@ table(rf.5.preds)
 submit.df <- data.frame(PassengerId = rep(892:1309), Survived = rf.5.preds)
 
 write.csv(submit.df, file = "RF_SUB_20160215_new.csv", row.names = FALSE)
-
-
-
-###########video 6####################
 
 
 # Install and load packages
@@ -684,11 +644,6 @@ View(rpart.1.cv.1)
 
 # Plot
 prp(rpart.1.cv.1$finalModel, type = 0, extra = 1, under = TRUE)
-
-
-
-
-
 
 # The plot bring out some interesting lines of investigation. Namely:
 #      1 - Titles of "Mr." and "Other" are predicted to perish at an 
